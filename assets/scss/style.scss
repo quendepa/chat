@@ -1,0 +1,94 @@
+body,
+input {
+    font-size: 1.2rem;
+    line-height: 1.3rem;
+}
+
+#memberContainer {
+    width: 25%;
+    height: 80%;
+    display: block;
+    background: rgb(42, 62, 70);
+    color: #f2f2f2;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+    width: 100%;
+}
+
+.align-center {
+    justify-content: center;
+    text-align: center;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.show {
+    display: block !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.tab-title {
+    padding: 0 1rem;
+}
+
+.border-r {
+    border-right: 1px solid;
+}
+
+#tabLogin,
+#tabSignup {
+    cursor: pointer;
+    text-align: center;
+}
+
+.error {
+    font-size: 0.8rem;
+    color: rgb(0, 255, 242);
+}
+
+#signForm,
+#loginForm {
+    padding: 1rem;
+    display: inline;
+    height: 80vh;
+    border-radius: 10px;
+    background-color: rgb(45, 56, 59);
+}
+
+.btn,
+input {
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 0.5rem 2rem;
+    size: 1rem;
+}
+
+.btn {
+    background-color: rgb(92, 121, 163);
+    color: #f2f2f2;
+}
+
+.btn:hover {
+    background-color: rgb(127, 173, 238);
+    color: #2f2f2f;
+}
+
+.error-win {
+    background: red;
+    display: block;
+}
+
+#asideElem {
+    width: 30%;
+}
