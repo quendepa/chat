@@ -65,10 +65,13 @@ input {
 }
 
 #signForm,
-#loginForm {
+#loginForm,
+#membersWin {
   padding: 1rem;
   display: inline;
   height: 80vh;
+  width: 20vw;
+  color: #f2f2f2;
   border-radius: 10px;
   background-color: #2d383b;
 }
