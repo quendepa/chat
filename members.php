@@ -73,7 +73,7 @@ if ( isset( $_POST['action'] ) ) {
             // insertion of the data
             if ( $numError == 0 ) {
                 //echo $numError;
-                //$inserred = $dbconnect->newMember( $_POST['login'], $_POST['password01'] );
+                $inserred = $dbconnect->newMember( $_POST['login'], $_POST['password01'] );
                 // add login to session when finish
                 $_SESSION["login"]=$_POST["login"];
             }
@@ -87,22 +87,29 @@ echo $html::openAside("asideElem",array("aside-elem"));
     if(isset($_SESSION["login"])) {
         //if we are logged we display the windows of members
         echo $html::openDiv("selectForm",array('row'));
-        echo "members";
+        
         echo $html::closeDiv();
 
-    }else{ // if we are not logged
+    }else{ 
+
+       
+
+        // if we are not logged
         //div for select the form login or singup
         echo $html::openDiv("selectForm",array('row'));
          echo $html::span("tabLogin",array("select-form","border-r"),"Login");
          echo $html::span("tabSignup",array("select-form"),"Sign-in");
          echo $html::closeDiv();   
         
-         if(isset($_POST['action'])=='signup'){
-            echo $html::openDiv( 'loginForm', array( 'show form' ) );
-         }else if(!(isset($_POST['action']))){
-            echo $html::openDiv( 'loginForm', array( 'show form' ) );
+         
+         if(isset($_POST['action'])){
+            if($_POST['action']=='signup'){
+                echo $html::openDiv( 'loginForm', array( 'show form' ) );
+            }else{
+                echo $html::openDiv( 'loginForm', array( 'hidden form' ) );
+            }         
          }else {
-            echo $html::openDiv( 'loginForm', array( 'hidden form' ) );
+            echo $html::openDiv( 'loginForm', array( 'show form' ) );
          }
         
         // LOGIN FORM
@@ -124,6 +131,8 @@ echo $html::openAside("asideElem",array("aside-elem"));
         if(isset($_POST['action'])){
             if($_POST['action']=='signin'){
             echo $html::openDiv( 'signForm', array( 'show form' ) );
+            }else {
+                echo $html::openDiv( 'signForm', array( 'hidden form' ) );
             }
         }else {
             echo $html::openDiv( 'signForm', array( 'hidden form' ) );
