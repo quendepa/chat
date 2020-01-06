@@ -1,168 +1,79 @@
 <?php
-session_start();
-require 'class/Autoloader.php';
-Autoloader::register() ;
-$html = new Html();
-$form = new Form( $_POST );
-$dbconnect = new Connect();
-// checking if members existe with ajax
-
-if(isset($_GET['action'])){
-    if($_GET['action']=='checkMember'){
-        $dbconnect = new Connect();
-        $form = new Form( $_POST );
-        $thelog = $_GET['login']; 
-        //sanitization du log
-        $thelogSan = $form->sanitize($thelog);
-        if($thelog !== $thelogSan){
-            echo "error";
-        }else{
-        echo $dbconnect->ifMemExist($thelog);
-        }    
-        die();        
-    }
-}
-
-?>
-
-<!DOCTYPE html>
-<html lang = 'en'>
-
-<head>
-<?php
-echo $html::addInHead( 'meta', array( 'charset'=>'UTF-8' ) );
-echo $html::addInHead( 'meta', array( 'name'=>'viewport', 'content'=>'width=device-width, initial-scale=1.0' ) );
-echo $html::addInHead( 'meta', array( 'http-equiv'=>'X-UA-Compatible', 'content'=>'ie=edge' ) );
-echo $html::addInHead( 'link', array( 'rel'=>'stylesheet', 'href'=>'assets/css/style.css' ) );
-?>
-
-<title>Document</title>
-</head>
-
-<body>
-
-<?php
-
-
-
-// checking data
-if ( isset( $_POST['action'] ) ) {
-    $action = $_POST['action'];
-    switch( $action ) {
-        case 'signup':
-            $form->checkData( 'userlogin' );
-            $form->checkData( 'userpassword' );    
-            $numError = $form->ifError();
-            // if not error we check if the user can enter
-            $userExist = $dbconnect->enterChat($_POST['userlogin'],$_POST['userpassword']);
-            if($userExist==1){
-                $_SESSION["login"]=$_POST["userlogin"];
-            }else {
-                echo $userExist;
-            }
-            
-            
-        break;
-        case 'signin':
-        $form->checkData( 'login' );
-        $form->checkData( 'password01' );
-        $form->checkData( 'password02' );
-        $form-> equalData( 'password01', 'password02' );
-        // we check the result
-        $numError = $form->ifError();
-            // insertion of the data
-            if ( $numError == 0 ) {
-                //echo $numError;
-                $inserred = $dbconnect->newMember( $_POST['login'], $_POST['password01'] );
-                // add login to session when finish
-                $_SESSION["login"]=$_POST["login"];
-            }
-        break;
-        }
-
-        
-    }
-
-echo $html::openAside("asideElem",array("aside-elem"));
-    if(isset($_SESSION["login"])) {
-        //if we are logged we display the windows of members
-        echo $html::openDiv("selectForm",array('row'));
-        
+    
+    echo $html::openAside("leftFrame",array("aside"));
+        // IF WE ARE LOGGED WE DISPLAY THE LIST OF MEMBERS IN THE CHAT
+        if(isset($_SESSION['login'])){
+        // MEMBERS FRAME
+        echo $html::openDiv("membersFrame",array("row"));
+            echo $html::span(null,array("title"),"Connected members");           
+            echo $html::openDiv(null,array("members"));      
+                $listOfMembers = $connect->getAllMembers();
+                foreach ($listOfMembers as $key => $value) { // display list of members
+                    echo $value['login']."<br>";
+                }   
+            echo $html::closeDiv();
+            echo $html::openDiv(null,array("footer"));
+                echo $html::button("logout",array("button"),"logout</button");
+            echo $html::closeDiv();
         echo $html::closeDiv();
-
-    }else{ 
-
        
-
-        // if we are not logged
-        //div for select the form login or singup
-        echo $html::openDiv("selectForm",array('row'));
-         echo $html::span("tabLogin",array("select-form","border-r"),"Login");
-         echo $html::span("tabSignup",array("select-form"),"Sign-in");
-         echo $html::closeDiv();   
-        
-         
-         if(isset($_POST['action'])){
-            if($_POST['action']=='signup'){
-                echo $html::openDiv( 'loginForm', array( 'show form' ) );
-            }else{
-                echo $html::openDiv( 'loginForm', array( 'hidden form' ) );
-            }         
-         }else {
-            echo $html::openDiv( 'loginForm', array( 'show form' ) );
-         }
-        
-        // LOGIN FORM
-       
-        $line = '<span class=\'form-title\'';
-        $line .= '>SignUp</span>';
-        echo $line;
-        echo $form::openForm( 'formSignup', 'post', 'members.php' );
-        echo $html::wrap( 'p', 'Choose a login : '.$form->input( 'userlogin', 'text' ) );
-        echo $form->errorMessage( 'userlogin', 'use only alphanumeric caracter and 15max' );
-        echo $html::wrap( 'p', 'Choose a password : '.$form->input( 'userpassword', 'password' ) );
-        echo $form->errorMessage( 'userpassword', 'use only alphanumeric caracter and 15max' );
-        echo $form->input( 'action', 'hidden', 'signup' );
-        echo $html::wrap( 'p', $form->submit( 'Sign up' ) );
-        echo $form::closeForm();
-        //closeform
-        echo $html::closeDiv();
-
-        if(isset($_POST['action'])){
-            if($_POST['action']=='signin'){
-            echo $html::openDiv( 'signForm', array( 'show form' ) );
-            }else {
-                echo $html::openDiv( 'signForm', array( 'hidden form' ) );
-            }
         }else {
-            echo $html::openDiv( 'signForm', array( 'hidden form' ) );
-        }
-        // SIGNIN FORMS
 
-        $line = '<span class=\'form-title\'';
-        $line .= '>SignUp</span>';
-        echo $line;
-        echo $form::openForm( 'formSign', 'post', 'members.php' );
-        echo $html::wrap( 'p', 'Choose a login : '.$form->input( 'login', 'text' ) );
-        echo $form->errorMessage( 'login', 'use only alphanumeric caracter and 15max' );
-        echo $html::wrap( 'p', 'Choose a password : '.$form->input( 'password01', 'password' ) );
-        echo $form->errorMessage( 'password01', 'use only alphanumeric caracter and 15max' );
-        echo $html::wrap( 'p', 'Comfirm password : '.$form->input( 'password02', 'password' ) );
-        echo $form->errorMessage( 'password02', 'use only alphanumeric caracter and 15max' );
-        echo $form->input( 'action', 'hidden', 'signin' );
-        echo $html::wrap( 'p', $form->submit( 'Sign in' ) );
-        echo $form::closeForm();
-        //closeform
-        echo $html::closeDiv();
-    }
-echo $html::closeAside();
-?>
-<?php
-//scripts
-echo $html::addscript( 'assets/js/actions.js' );
 
-?>
+        // FRAME OF THE TWO FORMS
+        echo $html::openDiv("tabMenu",array("tab"));
+            echo $html::span("tabsignup",array("tabform"),"Sign-in");
+            echo "<span class=\"separator\">|</span>";
+            echo $html::span("tabsignin",array("tabform"),"Sign-up");
+        echo $html::closeDiv(); 
+            
+             //IF AREN'T POST DATA OR POST[LOGIN]  EXIST
+             if(sizeof($_POST)==0 OR isset($_POST['login'])){
+                echo $html::openDiv("signupFrame",array("form","show"));
+             }else {
+                echo $html::openDiv("signupFrame",array("form","hidden"));
+             }
 
-</body>
+            //  SIGNUP FRAME  /////////////////////////////////////////////////
+            
+                echo $html::span(null,array("title","clear"),"Sign-in"); 
+                if(isset($error) AND isset($errormessageLogin)){
+                if($error>0){
+                echo "<div class=\"error\">".$html::span(null,array("span"),implode($errormessageLogin))."</div>";
+                }
+            }
+                echo $form::openForm("loginForm","post","index.php");   
+                    echo $html::wrap("p","Login :").$form->input('login','text',null);
+                    echo $html::wrap("p","Password :").$form->input('password','password',null);
+                    echo $html::button(null,array('btn'),"Enter Chat");
+                echo $form::closeform();
+            echo $html::closeDiv();
 
-</html>
+             //IF POST[LOGIN] DOESN'T EXIST AND POST IS SET
+             if(isset($_POST["newlogin"])){
+                echo $html::openDiv("signinFrame",array("form","show"));
+             }else {
+                echo $html::openDiv("signinFrame",array("form","hidden"));
+             }
+            // SIGNIN FRAME  //////////////////////////////////////////////////////
+                echo $html::span(null,array("title","clear"),"Sign-up");  
+                if(isset($error) AND isset($errormessageSign)){
+                 if($error>0){
+                echo "<div class=\"error\">".$html::span(null,array("span"),implode($errormessageSign))."</div>";
+                }
+            }
+                echo $form::openForm("signForm","post","index.php");   
+                    echo $html::wrap("p","Login :").$form->input("newlogin","text",null);
+                    echo $html::wrap("p","Password :").$form->input("password01","password",null);
+                    echo $html::wrap("p","Confirm Password :").$form->input("password02","password",null);
+                    echo $html::button(null,array("btn"),"signup");
+                echo $form->closeForm();
+            echo $html::closeDiv();
+             }
+        
+        
+       
+   echo $html::closeAside();
+
+
+    ?>

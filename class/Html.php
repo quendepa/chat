@@ -24,12 +24,13 @@ class Html{
     public static function errorMessage($mess){
         return "<span class=\"error \">".$mess."</span>";
     }
+    public static function button($id,$class,$text){
+        return "<button id=\"$id\" class=\"".implode(" ",$class)."\">$text</button>";
+    }
 
     public static function openDiv($id=null,$class){
         $line = "<div id=\"".$id."\" ";
-        foreach ($class as $key => $value) {
-            $line.=" class=\"".$value."\"";
-        }
+        $line.="class=\"".implode(" ",$class)."\"";
         $line.=" >";
         return $line;
         
