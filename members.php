@@ -9,7 +9,7 @@
             echo $html::openDiv(null,array("members"));      
                 $listOfMembers = $connect->getAllMembers();
                 foreach ($listOfMembers as $key => $value) { // display list of members
-                    echo $value['login']."<br>";
+                    echo $html::wrap("p","<span class=\"persoImg\"></span>".$value['login']);
                 }   
             echo $html::closeDiv();
             echo $html::openDiv(null,array("footer"));

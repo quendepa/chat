@@ -17,6 +17,8 @@ class Html{
          return ("<script src=\"".$adress."\"></script>");
     }
 
+    //@param tag - string
+    //return string
     public static function wrap($tag="p",$line) {
         return "<".$tag.">".$line."</".$tag.">";
     } 
