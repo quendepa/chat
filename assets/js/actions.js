@@ -1,50 +1,52 @@
-document.getElementById("tabLogin").addEventListener('click', (e) => {
-    document.getElementById("loginForm").classList.remove("hidden");
-    document.getElementById("loginForm").classList.add("show");
-    document.getElementById("signForm").classList.add('hidden');
-    document.getElementById("signForm").classList.remove('show');
-});
-document.getElementById("tabSignup").addEventListener('click', (e) => {
-    document.getElementById("signForm").classList.remove("hidden");
-    document.getElementById("signForm").classList.add("show");
-    document.getElementById("loginForm").classList.remove("show");
-    document.getElementById("loginForm").classList.add("hidden");
-});
+let domTabLogin = document.getElementById("tabsignup");
+if (domTabLogin !== null) {
+    document.getElementById("tabsignup").addEventListener('click', (e) => {
+        document.getElementById('signupFrame').classList.remove('hidden');
+        document.getElementById('signupFrame').classList.add("show");
+        document.getElementById('signinFrame').classList.remove('show');
+        document.getElementById('signinFrame').classList.add("hidden");
+    });
+}
+let domTabSignup = document.getElementById("tabsignin");
+if (domTabSignup !== null) {
+    document.getElementById("tabsignin").addEventListener('click', (e) => {
+        document.getElementById('signupFrame').classList.remove('show');
+        document.getElementById('signupFrame').classList.add("hidden");
+        document.getElementById('signinFrame').classList.remove('hidden');
+        document.getElementById('signinFrame').classList.add("show");
+    });
+}
+let btnAvatar = document.getElementById("avatar");
+if (btnAvatar !== null) {
+    document.getElementById("avatar").addEventListener('click', (e) => {
+        document.getElementById('downloaderFile').classList.remove('hidden');
+    });
+}
+let btnclose = document.getElementById("symbolClose");
+if (btnclose !== null) {
+    document.getElementById("symbolClose").addEventListener('click', (e) => {
+        document.getElementById('downloaderFile').classList.add('hidden');
+    });
+}
 
-document.getElementsByName('login')[0].addEventListener('input', () => {
-    let logToCheck = document.getElementsByName('login')[0].value;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            switch (this.response) {
-                case ('true'):
-                    alert("This login exist \r change it or signin !");
-                    break;
-                case ('error'):
-                    alert("alphanumeric character only !");
-                    document.getElementsByName('login')[0].value = logToCheck.slice(0, -1);
-                    break;
+
+
+
+let logoutBut = document.getElementById('logout');
+if (logoutBut !== null) {
+    logoutBut.addEventListener('click', () => {
+        let logOut = confirm("Do you really want logout ?");
+        if (logOut) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.response);
+                    alert(this.response + " are logout !");
+                    document.location.href = "index.php";
+                }
             }
+            xmlhttp.open("GET", `index.php?action=logout`);
+            xmlhttp.send();
         }
-    }
-    xmlhttp.open("GET", `members.php?action=checkMember&login=${logToCheck}`);
-    xmlhttp.send();
-
-});
-document.getElementsByName('userlogin')[0].addEventListener('input', () => {
-    let logToCheck = document.getElementsByName('userlogin')[0].value;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            switch (this.response) {
-                case ('error'):
-                    alert("alphanumeric character only !");
-                    document.getElementsByName('userlogin')[0].value = logToCheck.slice(0, -1);
-                    break;
-            }
-        }
-    }
-    xmlhttp.open("GET", `members.php?action=checkMember&login=${logToCheck}`);
-    xmlhttp.send();
-
-});
+    });
+}
