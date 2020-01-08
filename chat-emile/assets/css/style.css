@@ -1,5 +1,5 @@
 body {
-  background-color: #413737;
+  background-color: #16242F;
 }
 
 body,
@@ -23,7 +23,7 @@ input {
           justify-content: space-evenly;
   width: 100%;
   height: 80vh;
-  color: #fff;
+  color: #000;
 }
 
 .container aside,
@@ -31,8 +31,8 @@ input {
   border-radius: 10px;
   padding: 1rem;
   margin: 1rem;
-  background-color: #32413d;
-  border: 4px solid rgba(242, 242, 242, 0.5);
+  background-color: #fff;
+  border: 4px solid #60C0CE;
 }
 
 .container aside {
@@ -59,21 +59,26 @@ input {
 }
 
 .container aside #membersFrame .members {
-  height: 80%;
+  height: 50%;
   overflow-y: scroll;
 }
 
-<<<<<<< HEAD
-=======
-.container aside #membersFrame .members span.persoImg {
-  display: block;
-  width: 300px !important;
-  height: 300px !important;
-  background: black !important;
+.container aside #membersFrame .members .force-overflow {
+  min-height: 450px;
+}
+
+.container aside #membersFrame .members p span.persoImg {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  float: left;
+  width: 2vw;
+  height: 2vw;
+  background: #fff;
+  border: 2px solid black;
   border-radius: 50%;
 }
 
->>>>>>> origin/bartosz
 .container aside #membersFrame .footer {
   -ms-flex-item-align: start;
       align-self: flex-start;
@@ -137,12 +142,12 @@ button {
   padding: 0.5rem 1.2rem;
   border-radius: 10px;
   border: 0;
-  background-color: #72e1f0;
+  background-color: #60C0CE;
 }
 
 button:hover {
-  color: #fff;
-  background-color: #478d96;
+  color: #242424;
+  background-color: rgba(96, 191, 206, 0.849);
 }
 
 #tabMenu {
@@ -152,7 +157,7 @@ button:hover {
   margin-bottom: 1rem;
   text-align: center;
   border-radius: 5px;
-  background: #495e58;
+  background: #60C0CE;
 }
 
 #tabMenu .tabform {
@@ -160,7 +165,7 @@ button:hover {
 }
 
 #tabMenu .tabform:hover {
-  color: #a1d8f8;
+  color: #242424;
 }
 
 .separator {
@@ -175,68 +180,37 @@ button:hover {
   background: orangered;
   color: #fff;
 }
-<<<<<<< HEAD
 
-.avatar {
-  margin-left: 1rem;
+#members::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
+  border-radius: 10px;
 }
 
-.modal {
-  position: absolute;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(73, 65, 65, 0.8);
-  -webkit-transition: all 0.5s ease-in;
-  transition: all 0.5s ease-in;
+#members::-webkit-scrollbar {
+  width: 10px;
+  background-color: #F5F5F5;
 }
 
-.close {
-  background: teal;
-  width: 60px;
-  height: 60px;
-  position: absolute;
-  top: 2rem;
-  left: 90%;
+#members::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, #7a99d9), color-stop(0.72, #497dbd), color-stop(0.86, #1c3a94));
 }
 
-.close:hover {
-  background-color: #00e1ff;
+#members::-moz-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
+  border-radius: 10px;
 }
 
-.close:before {
-  content: "";
-  height: 60px;
-  border-left: 2px solid #fff;
-  position: absolute;
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
-  left: 28px;
+#members::-moz-scrollbar {
+  width: 10px;
+  background-color: #F5F5F5;
 }
 
-.close:after {
-  content: "";
-  height: 60px;
-  border-left: 2px solid #fff;
-  position: absolute;
-  -webkit-transform: rotate(-45deg);
-          transform: rotate(-45deg);
-  left: 28px;
+#members::-moz-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: -moz-gradient(linear, left bottom, left top, color-stop(0.44, #7a99d9), color-stop(0.72, #497dbd), color-stop(0.86, #1c3a94));
 }
-=======
->>>>>>> origin/bartosz
 /*# sourceMappingURL=style.css.map */
