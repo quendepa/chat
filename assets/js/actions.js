@@ -50,3 +50,5 @@ if (logoutBut !== null) {
         }
     });
 }
+
+// before closing browser

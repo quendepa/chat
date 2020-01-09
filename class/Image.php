@@ -27,28 +27,26 @@ class Image {
     public function saveTempoImage() {
         if ( in_array( $this->extension, self::EXT ) ) {
             // save the tempo file
-            $picString = is_uploaded_file( $this->tempoPic);
+            $savedPic = move_uploaded_file($this->tempoPic,$this->tempoPath);  
             //create image from the string
-            $newImage = @imagecreatefromstring($imgString);
-            echo $picString;
-            // resize the picture
+            $openSavedPic = fopen($this->tempoPath,"r");    
+            // resize this image
+            $image = imagecreatefromjpeg($this->tempoPath);
+            // create new empty image
             $tmpImage = imagecreatetruecolor($this->width, $this->height);
-            @imagecopyresampled($tmpImage, $newImage,
-            0, 0,
-            0, 0,
-            $this->infoPic[0], $this->infoPic[1],
-            $this->width, $this->height);
-            imagejpeg($tmpImage,$this->tempoPic , 100);
-            //echo  $this->tempoPic;
+            imagecopyresampled($tmpImage,$image,0,0,0,0,$this->width,$this->height, $this->infoPic[0],$this->infoPic[1]);
+            //  save the thumbanil version
+            $pathOfPic=self::TEMPODIRECTORY.'thumb-'.$this->login.'.'.$this->extension;
+            imagejpeg($tmpImage,$pathOfPic);
+            // transform picture to binary before tu send in the database
+            $dataImage = fopen($pathOfPic, 'r' );
+            $dataImageSize = filesize($pathOfPic);
+            $dataImageContents = fread($dataImage, $dataImageSize);
+            fclose($dataImage);
+            return $encoded = base64_encode($dataImageContents);
+        
 
 
-
-            $src = addslashes(file_get_contents($this->tempoPic));
-
-            //$dst = imagecreatetruecolor( $newwidth, $newheight );
-            //imagecopyresampled( $dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height );
-
-            //echo $src;
 
         } else {
             return 'false';

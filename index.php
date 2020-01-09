@@ -87,6 +87,7 @@ if($_POST){
         $getIdmUser= $connect->getIdmUser($login);
         $idmUser=$getIdmUser[0];
         $inserMessage = $connect->insertNewMessage($idmUser,$_POST['userMessage']);
+    
     }
 }
 
@@ -95,10 +96,9 @@ if($_POST){
 
 if(isset($_FILES['myfile'])){
     $img = new Image($_FILES['myfile'],$_SESSION['login']);
-    echo $img->saveTempoImage();
-
-    //$file= addslashes(file_get_contents($_FILES["myfile"]["tmp_name"]));
-    //echo $file;
+    $imageInBinary = $img->saveTempoImage();
+    // we push the picture in the database
+    $connect->addAvatar($imageInBinary,$_SESSION['login']);
     
        
     

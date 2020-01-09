@@ -173,6 +173,36 @@ class Connect {
         }
 
     }
+
+    public function getAllMessages($login){
+        try{
+            $db= $this->connection();
+            $db->beginTransaction();
+            $query=$db->query("SELECT * FROM allmessage")->fetchAll();
+            return $query;
+        }catch(Exception $e){
+            return "Error get members list :".$e->getMessages();
+        }
+    }
+ 
+    public function addAvatar($imageinBinary,$login){
+        echo $login;    
+        try{
+            $db = $this->connection();
+            $db->beginTransaction();
+            $query=$db->query( " UPDATE members(picture) SET ('emile') WHERE login='markusemile' " );
+            $db->commit();
+            //$query = $db->prepare( ' INSERT INTO allmessage (idm,texte,senddate) VALUES (:idm,:texte,:senddate)' );
+           /* $query->execute(array(
+            'picture' => 'bonjour',
+            'login'=> $login*/
+            
+    //));
+            }catch(Exception $e){
+            echo $e->getMessages();
+        }
+    }
+
 }
 
 ?>

@@ -20,6 +20,10 @@ echo $html::openDiv("messageScreen",array("div"));
     echo $html::openDiv(null,array("roww"));
         echo $html::openDiv("themessages",array("messScreen"));
             // get all messages
+            $allMessages = $connect->getAllMessages($_SESSION['login']);
+            foreach ($allMessages as $key => $value) {
+                    echo $value['texte']."<br>";
+                          }
 
         echo $html->closeDiv();
     echo $html->closeDiv();
