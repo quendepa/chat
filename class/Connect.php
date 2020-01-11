@@ -6,6 +6,8 @@ class Connect {
     const DBNAME = 'chat';
     const USER = 'root';
     const PASS = 'root';
+    const MAXUPLOAD = 30000;
+
 
     private function connection() {
         try {
@@ -20,9 +22,13 @@ class Connect {
         try {
             $db = $this->connection();
             $db->beginTransaction();
-            $query = $db->query( "SELECT login FROM members WHERE login='$login' " )->fetch();
-            ( $query>1 ) ? $exist = 'true' : $exist = 'false';
-            return $exist;
+            $query = $db->prepare('SELECT mem_login FROM members WHERE mem_login= :mem_login');
+            $query->bindParam(':mem_login',$login);
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            ( $query->rowCount()==1 ) ? $existe="true" : $existe="false";
+            return $existe;
+            die();
         } catch(Exception $e ) {
             return 'Cannot verified if user exist : Error ->'.$e->getMessage();
         }
@@ -32,45 +38,87 @@ class Connect {
         return password_hash( $password, PASSWORD_DEFAULT );
     }
 
+    private function getLastIdm(){
+        $db=$this->connection();
+        $db->beginTransaction();
+        $sql = "SELECT idm FROM members";
+        $query=$db->prepare($sql);
+        $query->execute();
+        return $query->rowCount();
+    }
+
     public function newMember( $nom, $passWord ) {
         // we hashed the password before to insert
         $hashPass = $this->hashed( $passWord );
+        $onlineTag = "1";
+        $blobImage = fopen("assets/media/nopic.png", 'r' );
+        $blobImageSize = filesize("assets/media/nopic.png");
+        $blob = "X0";//fread($blobImage, $blobImageSize);
+       // echo $blob;
+        $idm=$this->getLastIdm()+1;
+        $tokken=session_id();
         try {
             $db = $this->connection();
-            // connection
             $db->beginTransaction();
-            $query = $db->query( "INSERT INTO members (login,password,online) VALUES ('$nom','$hashPass','1')" );
-            return $db->commit();
+            $sql = "INSERT INTO members VALUES (:myid,:mylog,:mypass,:blob,:myonline,:mysess) ";
+            $query=$db->prepare($sql);
+            $query->bindParam(':myid',$idm);
+            $query->bindParam(':mylog',$nom);
+            $query->bindParam(':mypass', $hashPass);
+            $query->bindParam(':blob', $blob,PDO::PARAM_LOB);
+            $query->bindParam(':myonline', $onlineTag);
+            $query->bindParam(':mysess', $tokken);
+            $query->execute();
+            if($db->commit()){
+                return "1";
+            }
+            //return $query->rowCount();
+            //echo "\nPDO::errorInfo():\n";
+            //print_r($db->errorInfo());
+
         } catch( Exception $e ) {
             return 'insertion of the new member Failed : Error-> '.$e->getMessage();
         }
 
     }
 
-    public function online($name){                   
+    //function to change the variable online in the database
+    //@param string($name)
+    //return bollean/int
+    public function online($name)  { 
+            $tokken=session_id();
+            $onlineTag = 1;
             $db = $this->connection();
             $db->beginTransaction();
             //first we check if the user is yet connected on other device;
-            $yetconnect = $db->query("SELECT * FROM members WHERE (login='$name' AND online=1)");
-            $connected = $yetconnect->rowCount();
-            //echo $connected;
-            if($connected == 0){
-            $db = $this->connection();
-            $db->beginTransaction();
-            $query = $db->query("UPDATE members SET online='1' WHERE login='$name' ");
-            return $db->commit();            
-            }         
+            $yetconnect = $db->prepare(' SELECT * FROM members   WHERE mem_login=:mem_login AND mem_online=:mem_online ');
+            $yetconnect->bindParam(':mem_login',$name);
+            $yetconnect->bindParam(':mem_online',$onlineTag);
+            $yetconnect->execute();
+            $db->commit();
+            $result = $yetconnect->rowCount();
+            if($result == 0){
+                $db = $this->connection();
+                $db->beginTransaction();
+                $query = $db->prepare('UPDATE members SET mem_tokken=?,mem_online=? WHERE mem_login=? ');
+                $query->execute(array($tokken,$onlineTag,$name));
+                return $db->commit ();                
+            } else {
+                return "2";
+            }        
     }
 
     // put offline the user when he want ti logout
     private function offline($name){
+        $offlineTag=0;
         try{
             $db = $this->connection();
             $db->beginTransaction();
-            $query = $db->query("UPDATE members SET online='0' WHERE login='$name' ");
+            $query = $db->prepare(" UPDATE members SET mem_online=? WHERE mem_login=? ");
+            $query->execute(array($offlineTag,$name));
             return $db->commit();
-        }catch(exceptions $e){
-            return "Error to put members online :".$e->getMessages();
+        }catch(Exception $e){
+            return "Error to put members online :".$e->getMessage();
         }
     }
     public function logout($user){
@@ -80,16 +128,20 @@ class Connect {
 
 
     // fonction to login the user and change the value of the online in the database
+    //@param string/string
+    // return bollean/int 
     public function enterChat( $login, $password ) {
         try{                    
             $db=$this->connection();
             $db->beginTransaction();
-            $query=$db->query("SELECT * FROM members WHERE login='$login'");
-            $num= $query->rowCount();            
+            $query=$db->prepare(' SELECT * FROM members WHERE mem_login=:mem_login ');
+            $query->bindParam(':mem_login',$login);
+            $query->execute();
+            $db->commit();
             if($query->rowCount()==1){
                 foreach ( $query as $row ) {
-                    $dblogin = $row['login'];
-                    $dbpass = $row['password']; // password hashed from database
+                    $dblogin = $row['mem_login'];
+                    $dbpass = $row['mem_password']; // password hashed from database
                 }
                 $passHash = password_verify($password,$dbpass);
                 if($passHash==1){
@@ -97,30 +149,101 @@ class Connect {
                 }
             } 
         }catch(Exception $e){
-            return "Connection of user Failed: Error-> ".$e->getMessages();
+            return "Connection of user Failed: Error-> ".$e->getMessage();
         }
     }
 
-    // function tio checked if the user us currently online on another browser or computer
+    // function to checked if the user us currently online on another browser or computer
     public function isonline($login){
-       $db=$this->connection();
+       $onlineTag=1;
+        $db=$this->connection();
        $db->beginTransaction();
-       $query=$db->query("SELECT online FROM members WHERE (login='$login' AND online='1') ")->fetch();
-       return $query;
+       $query=$db->prepare("SELECT mem_online FROM members WHERE (mem_login=:mem_login AND mem_online=:mem_online) ");
+       $query->bindParam(':mem_login',$login);
+       $query->bindParam(':mem_online',$onlineTag);
+       $query->execute();
+       $db->commit();
+       $result=$query->rowCount(); 
+       return $result;
     }
 
     
     // function get All members to display in the list on the screen
-    public  function getAllMembers(){
+    //@param : no param
+    // return array;
+    public function getAllMembers(){
         try{
             $db= $this->connection();
             $db->beginTransaction();
-            $query=$db->query("SELECT * FROM members WHERE online='1' ")->fetchAll();
+            $query=$db->query("SELECT * FROM members WHERE mem_online='1' ")->fetchAll();
             return $query;
-        }catch(Exceptions $e){
-            return "Error get members list :".$e->getMessages();
+        }catch(Exception  $e){
+            return "Error get members list :".$e->getMessage();
         }
     }
+
+    public function sendPicture($image,$pseudo){
+        $file =  is_uploaded_file($_FILES['$image']);
+        return $file;
+    }
+
+    public function getIdmUser($login){
+        try{
+            $db = $this->connection();
+            $db->beginTransaction();
+            $query = $db->query("SELECT idm FROM members WHERE mem_login='$login' ")->fetch();
+            return $query;            
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
+
+
+
+    public function insertNewMessage($idm,$mess){
+        $today = date("Y-m-d H:i:s");
+        try{
+        $db = $this->connection();
+       // $db->beginTransaction();
+        $query = $db->prepare( ' INSERT INTO allmessage (idm,texte,senddate) VALUES (:idm,:texte,:senddate)' );
+        $query->execute(array(
+            'idm' => $idm,
+            'texte' => $mess,
+            'senddate' => $today
+    ));
+        
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
+
+    }
+
+    public function getAllMessages(){
+        try{
+            $db= $this->connection();
+            $db->beginTransaction();
+            $query=$db->query("SELECT * FROM allmessage")->fetchAll();
+            return $query;
+        }catch(Exception $e){
+            return "Error get members list :".$e->getMessage();
+        }
+    }
+ 
+    public function addAvatar($mem_picture,$mem_login){      
+        try{
+            $db = $this->connection();
+            $sql="UPDATE members SET mem_picture=:mem_picture WHERE mem_login=:mem_login";
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':mem_picture', $mem_picture, PDO::PARAM_LOB);
+            $stmt->bindParam(':mem_login', $mem_login); 
+            $stmt->execute();                     
+            }catch(Exception $e){
+            echo $e->getMessage();
+        }
+    }
+
+   
+
 }
 
 ?>
