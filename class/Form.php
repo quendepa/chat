@@ -32,8 +32,16 @@ class Form {
     //return string
 
     public function input( $name, $type, $value = null ) {
-        ( $value == null ) ? $value = $this->getValue( $name ) : $value = $value;
-        return "<p><input type=\"".$type."\" name=\"".$name."\" value=\"".$value."\" required></p>";
+        if(isset($this->data[$name])){
+            $value=$this->data[$name];
+        }
+        $line ="<p><input type=\"".$type."\" name=\"".$name."\"";
+        if($value!==null && $type=="text"){$line.="value=\"".$value."\"";}        
+        $line.=" required></p>";
+        return $line;
+
+       /* ( $value == null ) ? $value = $this->getValue( $name ) : $value = $value;
+        return "<p><input type=\"".$type."\" name=\"".$name."\" value=\"".$value."\" required></p>";*/
     }
     //@param string (text in button)
     //return string

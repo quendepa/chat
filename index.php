@@ -1,8 +1,8 @@
 <?php
 session_start();
+
 $wearelogged="";
-//var_dump($_POST);
-//  var_dump($_SESSION);    
+   
 
 // class
 require 'class/Autoloader.php';
@@ -25,16 +25,21 @@ if($_POST){
             if($memberExist=="true"){
                 //on regarde si il est deja connecter ailleur ou pas
                 $isOnLine=$connect->isonline($_POST['login']);
-                if(is_array($isOnLine) && !(isset($_POST["login"]))){                
+                if( $isOnLine==1 && !(isset($_POST["login"]))){                
                  $error=1;
                     array_push($errormessageLogin,"This user is yet online ! <br>On another computer or in a other browser");
                 }else {
                     // if this user is not online, we can connect it
-                    if($connect->enterChat($_POST['login'],$_POST['password'])){                        
+                    $weconnect=0;
+                    $weconnect = $connect->enterChat($_POST['login'],$_POST['password']);
+                    if( $weconnect ==1 ){                        
                         $_SESSION['login']=$_POST['login'];
-                        echo $_SESSION['login'];
+                        //echo $_SESSION['login'];
                         $_POST=array();
                         $wearelogged="true"; 
+                    }else if( $weconnect==2) {
+                        $error=1;
+                        array_push($errormessageLogin,"Your are connected yet on another computer or browser !");
                     }else {
                         $error=1;
                         array_push($errormessageLogin,"Wrong password !");
@@ -44,13 +49,10 @@ if($_POST){
                 // member doesn't exist
                 $error=1;
                 array_push($errormessageLogin,"This login with this password doesn't existe.<br>Enter the right login and password or Signup");
-         
             }
-
          }
-        //echo $isConnected;
     }
-    
+    // NEW USER CHECKING DATA
     if(isset($_POST['newlogin'])){
         // we check if the data is correct
         $errormessageSign=Array();
@@ -62,7 +64,6 @@ if($_POST){
         if($error==0){
             // we checked if the login existe 
             $memberExist = $connect->ifMemExist($_POST['newlogin']);
-
             if($memberExist=="false"){
                 // we cant add the new user in the database
                 $adduser = $connect->newMember($_POST['newlogin'],$_POST['password01']);
@@ -70,6 +71,9 @@ if($_POST){
                     $_SESSION['login']=$_POST['newlogin'];
                     $_POST=array();
                     $wearelogged="true";
+                }else {
+                    $error=1;
+                    array_push($errormessageSign,"Not possible to create the new user. Contact the webmaster");
                 }
             }else {
                 $error=1;
@@ -86,7 +90,8 @@ if($_POST){
         // SEQUENCE D4AJOUT DANS LA BASE
         $getIdmUser= $connect->getIdmUser($login);
         $idmUser=$getIdmUser[0];
-        $inserMessage = $connect->insertNewMessage($idmUser,$_POST['userMessage']);
+        $connect->insertNewMessage($idmUser,$_POST['userMessage']);
+        echo $image;
     
     }
 }
@@ -117,7 +122,7 @@ if(isset($_FILES['myfile'])){
             $_POST=array();
             $wearelogged="false";
             $connect->logout($logi);
-            //echo $logi;
+            echo $logi;
             die();
          break;
          case "sendPic": 
@@ -151,7 +156,7 @@ echo $html::addInHead( 'link', array( 'rel'=>'stylesheet', 'href'=>'assets/css/s
     <?php 
     include('members.php');
     ?>
-    <section id="messageFrame" class="">
+    <section id="messageFrame">
     <!-- include here the message php files -->
     <?php include "messages.php"; ?>
     </section>

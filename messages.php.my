@@ -1,4 +1,19 @@
+<?php
+// afficher le formulaire
 
+// ouvrir div messageScreen
+    //ouvrir formulaire
+        //div allmessage
+            // allr chercher les messages et les afficher
+                // si idm = session idm float right
+                 //sinon float left
+
+        // div input message + bouton envoie
+
+    //fermer le formulaire
+// fermer div messageScreen
+
+?>
 <?php 
 
 echo $html::openDiv("messageScreen",array("div"));

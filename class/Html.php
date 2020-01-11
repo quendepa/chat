@@ -29,7 +29,8 @@ class Html{
     }
 
     public static function openDiv($id=null,$class){
-        $line = "<div id=\"".$id."\" ";
+        $line = "<div ";
+        if($id!==null){ $line.="id=\"".$id."\"";}
         $line.="class=\"".implode(" ",$class)."\"";
         $line.=" >";
         return $line;
@@ -39,7 +40,8 @@ class Html{
         return "</div>";
     }
     public static function openAside($id=null,$class){
-        $line = "<aside id=\"".$id."\" ";
+        $line = "<aside ";
+        if($id!==null){ $line.="id=\"".$id."\"";}
         foreach ($class as $key => $value) {
             $line.=" class=\"".$value."\"";
         }
@@ -52,11 +54,20 @@ class Html{
     }
 
     public static function span($id=null,$class,$text){
-        $line="<span id=\"".$id."\" class=\"";
+        $line="<span ";
+        if($id!==null){$line.="id=\"".$id."\"";}
+        $line.=" class=\"";
         foreach ($class as $key => $value) {
-            $line.=$value." ";
+            if($key>1){
+                $line.=" ";
+            }
+            $line.=$value;
         }
         $line.="\" >".$text."</span>";
+        return $line;
+    }
+    public static function img($id=null,$class,$img){
+        $line="<img src=''/>";
         return $line;
     }
 

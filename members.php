@@ -9,7 +9,16 @@
             echo $html::openDiv(null,array("members"));      
                 $listOfMembers = $connect->getAllMembers();
                 foreach ($listOfMembers as $key => $value) { // display list of members
-                    echo $value['login']."<br>";                }   
+                    // afficher avatar;
+                    $lines = $html->openDiv(null,array("member-list-item"));
+                        $lines.=$html->openDiv(null,array("member-picture"));
+                            $lines.="<img src=\"data:image/jpg;base64,".$value['mem_picture']."\" class=\"\">";
+                        $lines.= $html->closeDiv();
+                        $lines.=$html->span(null,array("member-name"),$value['mem_login']);
+                    $lines.= $html->closeDiv();
+                    echo $lines;
+                    //echo $html->img("memPic","member-picture",$avatar).$value['mem_login']."<br>";                }   
+                }
             echo $html::closeDiv();
             echo $html::openDiv(null,array("footer"));
                 echo $html::button("logout",array("button"),"logout");
