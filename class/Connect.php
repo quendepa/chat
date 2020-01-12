@@ -91,9 +91,10 @@ class Connect {
             $db = $this->connection();
             $db->beginTransaction();
             //first we check if the user is yet connected on other device;
-            $yetconnect = $db->prepare(' SELECT * FROM members   WHERE mem_login=:mem_login AND mem_online=:mem_online ');
+            $yetconnect = $db->prepare(' SELECT * FROM members   WHERE mem_login=:mem_login AND mem_online=:mem_online AND mem_tokken=:mem_tokken ');
             $yetconnect->bindParam(':mem_login',$name);
             $yetconnect->bindParam(':mem_online',$onlineTag);
+            $yetconnect->bindParam(':mem_tokken',$tokken);
             $yetconnect->execute();
             $db->commit();
             $result = $yetconnect->rowCount();
@@ -158,13 +159,18 @@ class Connect {
        $onlineTag=1;
         $db=$this->connection();
        $db->beginTransaction();
-       $query=$db->prepare("SELECT mem_online FROM members WHERE (mem_login=:mem_login AND mem_online=:mem_online) ");
+       $query=$db->prepare("SELECT * FROM members WHERE mem_login=:mem_login ");
        $query->bindParam(':mem_login',$login);
-       $query->bindParam(':mem_online',$onlineTag);
        $query->execute();
-       $db->commit();
-       $result=$query->rowCount(); 
-       return $result;
+       $queryFetch = $query->fetchAll();
+
+       if(($queryFetch[0]['mem_online']==1) AND ($queryFetch[0]['mem_tokken']==session_id())){
+           return 1;
+       }
+       else{
+           return 0;
+       }
+
     }
 
     
@@ -228,6 +234,16 @@ class Connect {
             return "Error get members list :".$e->getMessage();
         }
     }
+    public function getNewMessages($index){
+        try{
+            $db= $this->connection();
+            $db->beginTransaction();
+            $query=$db->query("SELECT * FROM allmessage WHERE (id>$index)")->fetchAll();
+            return $query;
+        }catch(Exception $e){
+            return "Error get members list :".$e->getMessage();
+        }
+    }
  
     public function addAvatar($mem_picture,$mem_login){      
         try{
@@ -241,6 +257,9 @@ class Connect {
             echo $e->getMessage();
         }
     }
+
+ 
+
 
    
 

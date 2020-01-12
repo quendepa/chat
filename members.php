@@ -1,24 +1,26 @@
 <?php
-    
-    echo $html::openAside("leftFrame",array("aside"));
+        echo $html::openAside("leftFrame",array("aside"));
         // IF WE ARE LOGGED WE DISPLAY THE LIST OF MEMBERS IN THE CHAT
         if(isset($_SESSION['login'])){
         // MEMBERS FRAME
         echo $html::openDiv("membersFrame",array("row"));
             echo $html::span(null,array("title"),"Connected members");           
-            echo $html::openDiv(null,array("members"));      
-                $listOfMembers = $connect->getAllMembers();
-                foreach ($listOfMembers as $key => $value) { // display list of members
-                    // afficher avatar;
-                    $lines = $html->openDiv(null,array("member-list-item"));
-                        $lines.=$html->openDiv(null,array("member-picture"));
-                            $lines.="<img src=\"data:image/jpg;base64,".$value['mem_picture']."\" class=\"\">";
-                        $lines.= $html->closeDiv();
-                        $lines.=$html->span(null,array("member-name"),$value['mem_login']);
+            echo $html::openDiv("membersList",array("members"));      
+           
+            $listOfMembers = $connect->getAllMembers();
+            foreach ($listOfMembers as $key => $value) { // display list of members
+                // afficher avatar;
+                $lines = $html->openDiv("mem_".$value['idm'],array("member-list-item"));
+                    $lines.=$html->openDiv(null,array("member-picture"));
+                        $lines.="<img src=\"data:image/jpg;base64,".$value['mem_picture']."\" class=\"img\">";
                     $lines.= $html->closeDiv();
-                    echo $lines;
-                    //echo $html->img("memPic","member-picture",$avatar).$value['mem_login']."<br>";                }   
-                }
+                    $lines.=$html->span(null,array("member-name"),$value['mem_login']);
+                $lines.= $html->closeDiv();
+                echo $lines;
+
+            }
+            
+                
             echo $html::closeDiv();
             echo $html::openDiv(null,array("footer"));
                 echo $html::button("logout",array("button"),"logout");

@@ -1,188 +1,213 @@
-    body {
-        background-color: rgb(65, 55, 55);
-    }
-    
-    body,
-    input {
-        font-size: 1.2rem;
-        line-height: 1.3rem;
-    }
-    
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: space-evenly;
-        width: 100%;
-        height: 80vh;
-        color: #fff;
-        aside,
-        #messageFrame {
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem;
-            background-color: rgb(50, 65, 61);
-            border: 4px solid rgba(242, 242, 242, 0.5);
-        }
-        aside {
-            margin: 1rem;
-            display: flex;
-            min-width: 20%;
-            flex-wrap: wrap;
-            flex-direction: column;
-            align-items: start;
-            #membersFrame {
-                height: 100%;
-                width: 100%;
-                text-align: center;
-                .members {
-                    height: 80%;
-                    overflow-y: scroll;
-                }
-                .footer {
-                    align-self: flex-start;
-                }
-            }
-            #signupFrame {
-                display: flex;
-                flex-direction: column;
-                align-content: start;
-                width: 100% !important;
-                text-align: center;
-            }
-            #signinFrame {
-                display: flex;
-                flex-direction: column;
-                align-content: start;
-                width: 100% !important;
-                text-align: center;
-            }
-        }
-    }
-    
+body {
+    background-color: rgb(65, 55, 55);
+}
+
+body,
+input {
+    font-size: 1.2rem;
+    line-height: 1.3rem;
+}
+
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 80vh;
+    color: #fff;
+    aside,
     #messageFrame {
-        display: flex;
-        min-width: 50% !important;
-    }
-    
-    .hidden {
-        display: none !important;
-    }
-    
-    .show {
-        display: flex;
-    }
-    
-    .title {
-        font-size: 2rem;
-    }
-    
-    input {
-        padding: 0.5rem 1.2rem;
         border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem;
+        background-color: rgb(50, 65, 61);
+        border: 4px solid rgba(242, 242, 242, 0.5);
     }
-    
-    button {
-        padding: 0.5rem 1.2rem;
-        border-radius: 10px;
-        border: 0;
-        background-color: rgb(114, 225, 240);
-    }
-    
-    button:hover {
-        color: #fff;
-        background-color: rgb(71, 141, 150);
-    }
-    
-    #tabMenu {
-        height: 2rem;
-        width: 100%;
-        padding-top: 1rem;
-        margin-bottom: 1rem;
-        text-align: center;
-        border-radius: 5px;
-        background: rgb(73, 94, 88);
-        .tabform {
-            cursor: pointer;
-        }
-        .tabform:hover {
-            color: rgb(161, 216, 248);
-        }
-    }
-    
-    .separator {
-        margin: 0 1rem;
-    }
-    
-    .error {
-        border-radius: 5px;
-        font-size: 0.9rem;
-        margin: 0.8rem 0;
-        padding: 0.5rem;
-        background: orangered;
-        color: #fff;
-    }
-    
-    .avatar {
-        margin-left: 1rem;
-    }
-    
-    .modal {
-        position: absolute;
+    aside {
+        margin: 1rem;
         display: flex;
+        min-width: 20%;
+        flex-wrap: wrap;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background-color: rgba(73, 65, 65, 0.8);
-        transition: all 0.5s ease-in;
+        align-items: start;
+        #membersFrame {
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            .members {
+                height: 80%;
+                overflow-y: scroll;
+            }
+            .footer {
+                align-self: flex-start;
+            }
+        }
+        #signupFrame {
+            display: flex;
+            flex-direction: column;
+            align-content: start;
+            width: 100% !important;
+            text-align: center;
+        }
+        #signinFrame {
+            display: flex;
+            flex-direction: column;
+            align-content: start;
+            width: 100% !important;
+            text-align: center;
+        }
     }
-    
-    .close {
-        background: teal;
-        width: 60px;
-        height: 60px;
-        position: absolute;
-        top: 2rem;
-        left: 90%;
+}
+
+#messageFrame {
+    display: flex;
+    width: 50% !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.show {
+    display: flex;
+}
+
+.title {
+    font-size: 2rem;
+}
+
+input {
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+}
+
+button {
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    border: 0;
+    background-color: rgb(114, 225, 240);
+}
+
+button:hover {
+    color: #fff;
+    background-color: rgb(71, 141, 150);
+}
+
+#tabMenu {
+    height: 2rem;
+    width: 100%;
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    border-radius: 5px;
+    background: rgb(73, 94, 88);
+    .tabform {
+        cursor: pointer;
     }
-    
-    .close:hover {
-        background-color: rgb(0, 225, 255);
+    .tabform:hover {
+        color: rgb(161, 216, 248);
     }
-    
-    .close:before {
-        content: "";
-        height: 60px;
-        border-left: 2px solid #fff;
-        position: absolute;
-        transform: rotate(45deg);
-        left: 28px;
-    }
-    
-    .close:after {
-        content: "";
-        height: 60px;
-        border-left: 2px solid #fff;
-        position: absolute;
-        transform: rotate(-45deg);
-        left: 28px;
-    }
-    
-    #messageScreen,
-    #messScreenForm {
-        width: 100%;
-    }
-    
-    #themessages {
-        height: 80%;
-        width: 95%;
-        overflow-y: scroll;
-    }
-    
-    .roww {
-        height: 80%;
-    }
+}
+
+.separator {
+    margin: 0 1rem;
+}
+
+.error {
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin: 0.8rem 0;
+    padding: 0.5rem;
+    background: orangered;
+    color: #fff;
+}
+
+.avatar {
+    margin-left: 1rem;
+}
+
+.modal {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(73, 65, 65, 0.8);
+    transition: all 0.5s ease-in;
+}
+
+.close {
+    background: teal;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 2rem;
+    left: 90%;
+}
+
+.close:hover {
+    background-color: rgb(0, 225, 255);
+}
+
+.close:before {
+    content: "";
+    height: 60px;
+    border-left: 2px solid #fff;
+    position: absolute;
+    transform: rotate(45deg);
+    left: 28px;
+}
+
+.close:after {
+    content: "";
+    height: 60px;
+    border-left: 2px solid #fff;
+    position: absolute;
+    transform: rotate(-45deg);
+    left: 28px;
+}
+
+#messageScreen,
+#messScreenForm {
+    width: 100%;
+}
+
+#messScreenForm {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+#themessages {
+    height: 100%;
+    width: 95%;
+    overflow-y: scroll;
+}
+
+.roww {
+    height: 70%;
+}
+
+.message-item {
+    width: 100%;
+    display: inline-block;
+}
+
+.align-message-right {
+    margin-right: 1rem;
+    float: right;
+}
+
+.align-message-left {
+    float: left;
+}
+
+#newMessForm input {
+    color: red;
+    width: 60%;
+}

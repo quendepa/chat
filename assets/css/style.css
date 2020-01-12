@@ -12,8 +12,8 @@ input {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
@@ -100,7 +100,7 @@ input {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  min-width: 50% !important;
+  width: 50% !important;
 }
 
 .hidden {
@@ -231,13 +231,44 @@ button:hover {
   width: 100%;
 }
 
+#messScreenForm {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
 #themessages {
-  height: 80%;
+  height: 100%;
   width: 95%;
   overflow-y: scroll;
 }
 
 .roww {
-  height: 80%;
+  height: 70%;
+}
+
+.message-item {
+  width: 100%;
+  display: inline-block;
+}
+
+.align-message-right {
+  margin-right: 1rem;
+  float: right;
+}
+
+.align-message-left {
+  float: left;
+}
+
+#newMessForm input {
+  color: red;
+  width: 60%;
 }
 /*# sourceMappingURL=style.css.map */

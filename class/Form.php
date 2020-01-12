@@ -21,7 +21,10 @@ class Form {
     // @param string
     // return string
     public static function openForm( $id, $method, $action,$enctype=null ) {
-        return "<form enctype=\"".$enctype."\" id=\"".$id."\" action=\"#\" method=\"".$method."\">";
+        $line= "<form ";
+        if($enctype!==null){$line.="enctype=\"".$enctype."\"";}
+        $line.=" id=\"".$id."\" action=\"index.php\" method=\"".$method."\">";
+        return $line;
     }
     //@param none
     // return string
@@ -40,8 +43,6 @@ class Form {
         $line.=" required></p>";
         return $line;
 
-       /* ( $value == null ) ? $value = $this->getValue( $name ) : $value = $value;
-        return "<p><input type=\"".$type."\" name=\"".$name."\" value=\"".$value."\" required></p>";*/
     }
     //@param string (text in button)
     //return string
@@ -103,6 +104,11 @@ class Form {
     public function ifError() {
         //  var_dump($this->errorlist); 
         return sizeof($this->errorlist);
+    }
+
+    public static function sanitiMess($message){
+        $txt = strip_tags($message);
+        return  $txt;
     }
 
 }

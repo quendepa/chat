@@ -32,8 +32,11 @@ if($_POST){
                     // if this user is not online, we can connect it
                     $weconnect=0;
                     $weconnect = $connect->enterChat($_POST['login'],$_POST['password']);
+                    echo $weconnect;
                     if( $weconnect ==1 ){                        
                         $_SESSION['login']=$_POST['login'];
+                        $userIdm = $connect->getIdmUser($_SESSION['login']);
+                        $_SESSION['idm']=$userIdm[0];
                         //echo $_SESSION['login'];
                         $_POST=array();
                         $wearelogged="true"; 
@@ -69,6 +72,8 @@ if($_POST){
                 $adduser = $connect->newMember($_POST['newlogin'],$_POST['password01']);
                 if($adduser==1){
                     $_SESSION['login']=$_POST['newlogin'];
+                    $userIdm = $connect->getIdmUser($_SESSION['login']);
+                    $_SESSION['idm']=$userIdm[0];
                     $_POST=array();
                     $wearelogged="true";
                 }else {
@@ -83,15 +88,19 @@ if($_POST){
     }
     if(isset($_POST['userMessage'])){
         $login = $_SESSION['login'];
+        $message = $_POST['userMessage'];
         //SANITIZE MESSAGE HERE
-            //A FAIRE
-        // SI ERROR DE SANITIZE CREER  VARIABLE D ERREUR SINON AJOUTER DANS LA BASE
-            //A FAIRE
-        // SEQUENCE D4AJOUT DANS LA BASE
+        $messageSanat = $form::sanitiMess($message);
+        //echo $messageSanat;
+        if($messageSanat !=="1"){
+        
         $getIdmUser= $connect->getIdmUser($login);
         $idmUser=$getIdmUser[0];
-        $connect->insertNewMessage($idmUser,$_POST['userMessage']);
-        echo $image;
+        $connect->insertNewMessage($idmUser,$messageSanat);
+        }else {
+            $errorInMessage="You may not use a html tag !";
+        }
+
     
     }
 }
@@ -129,6 +138,47 @@ if(isset($_FILES['myfile'])){
             $fileAdd = $connect->sendPicture($_GET['image'],$_SESSION['login']);            
             die();
          break;
+         case "getMessage": 
+            $index = $_GET['lastmessage'] ;     
+            $allNewMessage = $connect->getNewMessages($index);
+          // echo $allNewMessage[0][0]; 
+           foreach ($allNewMessage as $key => $value) {
+            if(isset($_SESSION['idm'])){
+                if($allNewMessage[$key]['idm']==$_SESSION['idm']){
+                    $alignement="align-message-right";
+            }else {
+                $alignement="align-message-left";
+            }
+            }else {
+                $alignement="align-message-left";
+            }
+            $idMessage="mess".$allNewMessage[$key]['id'];
+            $line = $html->openDiv($idMessage,array("message-item"));   
+            $line.= $html->span(null,array("message-text ",$alignement),$allNewMessage[$key]['texte']);                
+            $line.= $html->closeDiv();
+            echo $line;
+               //echo $allNewMessage[$key]['texte'];
+           }  
+            die();
+         break;
+         case "getMember":
+            $allConnected = explode(",",$_GET['allconnected']);
+            $newMembers = $connect->getAllMembers();
+            foreach ($newMembers as $key => $value) {
+               
+                    $lines = $html->openDiv("mem_".$value['idm'],array("member-list-item"));
+                    $lines.=$html->openDiv(null,array("member-picture"));
+                        $lines.="<img src=\"data:image/jpg;base64,".$value['mem_picture']."\" class=\"img\">";
+                    $lines.= $html->closeDiv();
+                    $lines.=$html->span(null,array("member-name"),$value['mem_login']);
+                    $lines.= $html->closeDiv();
+                    echo $lines;
+                
+            }
+            
+            die();
+         break;
+        
    }    
 
  }
@@ -152,7 +202,7 @@ echo $html::addInHead( 'link', array( 'rel'=>'stylesheet', 'href'=>'assets/css/s
 </head>
 
 <body>
-<div class="container dflex">
+<div class="container">
     <?php 
     include('members.php');
     ?>

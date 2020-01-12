@@ -51,16 +51,51 @@ if (logoutBut !== null) {
     });
 }
 
-// before closing browser
-window.onbeforeunload = closingCode;
 
-function closingCode() {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            return null;
+
+window.addEventListener('load', function() {
+
+    this.setInterval(function() {
+        // we take all members connected to compared with the database
+        let allMember = document.querySelectorAll(".member-list-item");
+        let connectedMember = [];
+        allMember.forEach(element => {
+            connectedMember.push(element.id.split('mem_')[1]);
+        });
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.response !== "") {
+
+                    let oldListeMess = document.getElementById('membersList').innerHTML;
+                    document.getElementById('membersList').innerHTML = this.response;
+
+
+                }
+            }
         }
-    }
-    xmlhttp.open("GET", `index.php?action=logout`);
-    xmlhttp.send();
-}
+        xmlhttp.open("GET", `index.php?action=getMember&allconnected=${connectedMember}`);
+        xmlhttp.send();
+    }, 600);
+
+    this.setInterval(function() {
+        let allMessage = document.querySelectorAll(".message-item");
+        let lastMessage = allMessage.length;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.response !== "") {
+                    let oldListeMess = document.getElementById('themessages').innerHTML;
+                    document.getElementById('themessages').innerHTML = oldListeMess + this.response;
+
+                }
+                // rest at the bottom of the div
+                //document.getElementById('themessages').scrollTop = document.getElementById('themessages').scrollHeight;
+
+            }
+        }
+        xmlhttp.open("GET", `index.php?action=getMessage&lastmessage=${lastMessage}`);
+        xmlhttp.send();
+    }, 1000);
+
+});
