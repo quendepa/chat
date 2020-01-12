@@ -164,8 +164,7 @@ if(isset($_FILES['myfile'])){
          case "getMember":
             $allConnected = explode(",",$_GET['allconnected']);
             $newMembers = $connect->getAllMembers();
-            foreach ($newMembers as $key => $value) {
-               
+            foreach ($newMembers as $key => $value) {               
                     $lines = $html->openDiv("mem_".$value['idm'],array("member-list-item"));
                     $lines.=$html->openDiv(null,array("member-picture"));
                         $lines.="<img src=\"data:image/jpg;base64,".$value['mem_picture']."\" class=\"img\">";
