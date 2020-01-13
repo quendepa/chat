@@ -69,8 +69,11 @@ if($_POST){
             $memberExist = $connect->ifMemExist($_POST['newlogin']);
             if($memberExist=="false"){
                 // we cant add the new user in the database
-                $adduser = $connect->newMember($_POST['newlogin'],$_POST['password01']);
+                
+                $adduser = $connect->newMember($_POST['newlogin'],$_POST['password01']);                
+
                 if($adduser==1){
+                    // default image
                     $_SESSION['login']=$_POST['newlogin'];
                     $userIdm = $connect->getIdmUser($_SESSION['login']);
                     $_SESSION['idm']=$userIdm[0];
@@ -97,24 +100,20 @@ if($_POST){
         $getIdmUser= $connect->getIdmUser($login);
         $idmUser=$getIdmUser[0];
         $connect->insertNewMessage($idmUser,$messageSanat);
+        header('Location:index.php');
         }else {
             $errorInMessage="You may not use a html tag !";
-        }
-
-    
+        }    
     }
 }
 
 
 // picture managment
-
 if(isset($_FILES['myfile'])){
     $img = new Image($_FILES['myfile'],$_SESSION['login']);
     $imageInBinary = $img->saveTempoImage();
     // we push the picture in the database
-    $connect->addAvatar($imageInBinary,$_SESSION['login']);
-    
-       
+    $connect->addAvatar($imageInBinary,$_SESSION['login']);      
     
 }
 

@@ -1,3 +1,6 @@
+window.onload = function() {
+    document.getElementById('themessages').scrollTop = document.getElementById('themessages').scrollHeight;
+}
 let domTabLogin = document.getElementById("tabsignup");
 if (domTabLogin !== null) {
     document.getElementById("tabsignup").addEventListener('click', (e) => {
@@ -28,9 +31,6 @@ if (btnclose !== null) {
         document.getElementById('downloaderFile').classList.add('hidden');
     });
 }
-
-
-
 
 let logoutBut = document.getElementById('logout');
 if (logoutBut !== null) {
@@ -76,7 +76,7 @@ window.addEventListener('load', function() {
         }
         xmlhttp.open("GET", `index.php?action=getMember&allconnected=${connectedMember}`);
         xmlhttp.send();
-    }, 600);
+    }, 2000);
 
     this.setInterval(function() {
         let allMessage = document.querySelectorAll(".message-item");

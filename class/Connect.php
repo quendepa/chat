@@ -51,10 +51,8 @@ class Connect {
         // we hashed the password before to insert
         $hashPass = $this->hashed( $passWord );
         $onlineTag = "1";
-        $blobImage = fopen("assets/media/nopic.png", 'r' );
-        $blobImageSize = filesize("assets/media/nopic.png");
-        $blob = "x0";//fread($blobImage, $blobImageSize);
-       // echo $blob;
+        $image_data=file_get_contents('assets/media/nopic.png'); 
+        $blob=base64_encode($image_data);
         $idm=$this->getLastIdm()+1;
         $tokken=session_id();
         try {
