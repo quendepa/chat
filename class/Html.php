@@ -28,10 +28,11 @@ class Html{
         return "<button id=\"$id\" class=\"".implode(" ",$class)."\">$text</button>";
     }
 
-    public static function openDiv($id=null,$class){
+    public static function openDiv($id=null,$class,$alt=null){
         $line = "<div ";
         if($id!==null){ $line.="id=\"".$id."\"";}
-        $line.="class=\"".implode(" ",$class)."\"";
+        $line.=" class=\"".implode(" ",$class)."\"";
+        if($alt!==null){ $line.=" title=\"".$alt."\"";}
         $line.=" >";
         return $line;
         

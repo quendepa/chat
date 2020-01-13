@@ -17,7 +17,7 @@ echo $html::openDiv("messageScreen",array("div"));
                     $alignement="align-message-left";
                 }
                 $idMessage="mess".$value['id'];
-                echo $html->openDiv($idMessage,array("message-item"));   
+                echo $html->openDiv($idMessage,array("message-item"),$value['mem_login']);   
                     echo $html->span(null,array("message-text ",$alignement),$value['texte']);                
                 echo $html->closeDiv();
             }
