@@ -226,7 +226,7 @@ class Connect {
         try{
             $db= $this->connection();
             $db->beginTransaction();
-            $query=$db->query("SELECT * FROM allmessage")->fetchAll();
+            $query=$db->query("SELECT * FROM allmessage JOIN members")->fetchAll();
             return $query;
         }catch(Exception $e){
             return "Error get members list :".$e->getMessage();
