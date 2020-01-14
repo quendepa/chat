@@ -1,4 +1,8 @@
 ## Projet réaliser avec la collaboration de Emile Markus et Bartosz Krynski.
+
+Liens vers le site web:
+http://markus-emile.be/becode/chat/index.php
+
 Le liens vers leur github :
 
 https://github.com/krynskibartosz,
@@ -29,6 +33,5 @@ Le projet a durée du 06/1/2020 au 13/01/2020, dans le cadre de notre formation 
 
 
 
-Liens vers le site web:
-http://markus-emile.be/becode/chat/index.php
+
 
